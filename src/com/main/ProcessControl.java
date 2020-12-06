@@ -1,4 +1,4 @@
-package com.monfolld;
+package com.main;
 import java.util.Scanner;
 
 public class ProcessControl {
@@ -14,5 +14,8 @@ public class ProcessControl {
         int age = scanner.nextInt();
         System.out.printf("Hi,%s,your age is %d\n",name,age);
 
+
     }
 }
+
+

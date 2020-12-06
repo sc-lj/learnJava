@@ -1,4 +1,4 @@
-package com.monfolld;
+package com.main;
 
 /*
 * 在Java中，变量必须先定义后使用，在定义变量的时候，可以给它一个初始值。
