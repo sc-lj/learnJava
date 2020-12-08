@@ -31,6 +31,7 @@ public class learnClass {
         // Person类型的变量，是可以指向Student类型的实例；
         // 把一个子类类型安全地变为父类类型的赋值，被称为向上转型（upcasting）
         Person s = new Student();
+        s.run();//执行的是Student的run
 
         Person p2 = new Person();
         Student s1 = (Student) s; // 将子类类型定义的父类变量，可以强制转化为子类变量，如果是父类类型定义的父类变量，无法转化为子类变量。
@@ -47,9 +48,22 @@ public class learnClass {
 
 };
 
+// 定义一个抽象类
+// 使用abstract修饰的类就是抽象类。我们无法实例化一个抽象类
+abstract class Man{
+    // 定义一个抽象方法，抽象方法必须在抽象类中定义
+    // 没有具体执行代码，这个方法就是抽象方法，抽象方法用abstract修饰。
+    // 其子类，子子类都必须实现run方法
+    public abstract void run();
 
-class Person {
+
+}
+
+// 父类不允许子类对它的某个方法进行覆写，可以把该方法标记为final。用final修饰的方法不能被Override
+class Person extends Man {
     //    为了避免字段直接暴露在外面，破坏封装性，可以将public改为private
+    // 对于一个类的实例字段，同样可以用final修饰。用final修饰的字段在初始化后不能被修改。对final字段重新赋值会报错：
+    public final double num = 0;
     private int age;
     protected String name;//子类能访问name
     protected String author;//子类能访问protected 定义的字段，也能访问public定义的字段
@@ -77,6 +91,32 @@ class Person {
         this.birth = birth;
     };
 
+    //覆写toString方法
+    @Override
+    public String toString(){
+        return "Person="+this.name;
+    }
+
+    // 比较是否相等:
+    @Override
+    public boolean equals(Object o) {
+        // 当且仅当o为Person类型:
+        if (o instanceof Person) {
+            Person p = (Person) o;
+            // 并且name字段相同时，返回true:
+            return this.name.equals(p.name);
+        };
+        return false;
+    };
+
+    //父类不允许子类对它的某个方法进行覆写，可以把该方法标记为final。用final修饰的方法不能被Override
+    public final void read(){
+        System.out.println("read book");
+    };
+
+    public String hello(){
+        return "hello"+name;
+    }
 
     //    通过封装的方法访问private变量；
     public String getName(){
@@ -151,6 +191,10 @@ class Person {
     public void setNames(String...names){
         System.out.println(Arrays.toString(names));
         this.names = names;
+    };
+
+    public void run(){
+        System.out.println("Person.run");
     }
 
 };
@@ -182,7 +226,19 @@ class Student extends Person{
     public Student(String name, int b,int scores){
         super(name,b);//如果这里不使用super，当调用这个构造方法时，会报错,该super会自动调用Person(String,int)构造方法，不管里面传的参数具体指向。
         this.scores = scores;
+    };
+
+    @Override
+    public void run(){
+        System.out.println("person.run");
+    };
+
+    //调用父类被覆写的方法，要用super。
+    @Override
+    public String hello(){
+        return super.hello()+"!!!";
     }
+
 }
 
 class Teacher extends Person{
@@ -195,6 +251,14 @@ class Teacher extends Person{
     public int getGrade(){
         return this.grade;
     };
+
+    @Override
+    public void run(){
+        System.out.println("Teacher.run");
+    };
+
+
+
 }
 
 
@@ -214,6 +278,7 @@ class Book{
         Person ming = new Person();
 
     };
+
 
 
 
