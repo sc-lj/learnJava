@@ -10,6 +10,14 @@ public class learnClass {
         Person yuan = new Person("fang",10);
         // 可以定义多个构造方法，在通过new操作符调用的时候，编译器通过构造方法的参数数量、位置和类型自动区分：
         Person xiao = new Person("fang",20,1990);
+        // 不推荐使用 实例变量.静态字段 访问静态对象
+        yuan.number = 10;
+        System.out.println("yuan number:"+xiao.number);//10
+        xiao.number = 100;
+        System.out.println("xiao number:"+yuan.number);// 100
+        Person.number =111;
+        Person.setNumber(120);
+        System.out.println("the number is "+Person.number);
 
         m.setBirth(1990);
         m.setNames("Xiao Ming", "Xiao Hong", "Xiao Jun");
@@ -43,19 +51,40 @@ public class learnClass {
         if (obj instanceof String) {
             String st = (String) obj;//强制转化类型
             System.out.println(st.toUpperCase());
-        }
+        };
+
+        // 实例化一个内部类
+        Person.Inner inner = yuan.new Inner();
+        inner.hello();
+        inner.setBirth(100);
+        System.out.println("this birth is "+yuan.getBirth());
+
     };
 
 };
 
+//interface可以声明一个接口;所谓interface，就是比抽象类还要抽象的纯抽象接口，因为它连字段都不能有
+//一个interface可以继承自另一个interface。interface继承自interface使用extends，它相当于扩展了接口的方法
+interface Things{
+    // 实现类可以不必覆写default方法。default方法的目的是，当我们需要给接口新增一个方法时，会涉及到修改全部子类。
+    // 如果新增的是default方法，那么子类就不必全部修改，只需要在需要覆写的地方去覆写新增方法
+    // 非default方法，在继承时，必须覆写。
+    default void run(){
+        System.out.println(getName() + " run");
+    };
+    String getName();
+
+}
+
 // 定义一个抽象类
 // 使用abstract修饰的类就是抽象类。我们无法实例化一个抽象类
-abstract class Man{
+// 当一个具体的class去实现一个interface时，需要使用implements关键字
+abstract class Man implements Things{
     // 定义一个抽象方法，抽象方法必须在抽象类中定义
     // 没有具体执行代码，这个方法就是抽象方法，抽象方法用abstract修饰。
     // 其子类，子子类都必须实现run方法
     public abstract void run();
-
+    public abstract String getName();
 
 }
 
@@ -71,6 +100,13 @@ class Person extends Man {
     private int birth;
     private String[] names;
     private int[] ages;
+    //静态字段只有一个共享“空间”，所有实例都会共享该字段;
+    //对于静态字段，无论修改哪个实例的静态字段，效果都是一样的：所有实例的静态字段都被修改了，原因是静态字段并不属于实例
+    public static int number;
+
+    public static void setNumber(int number){
+        Person.number = number;//无法用this访问
+    }
 
     //即能使用带参数的构造方法，又想保留不带参数的构造方法
     public Person(){};
@@ -150,6 +186,10 @@ class Person extends Man {
         return author;
     };
 
+    public int getBirth(){
+        return this.birth;
+    };
+
     public void setAuthor(String author) {
         this.author = author;
     }
@@ -195,6 +235,17 @@ class Person extends Man {
 
     public void run(){
         System.out.println("Person.run");
+    };
+
+    // 定义一个内部类
+    class Inner {
+        void hello() {
+            System.out.println("Hello, " + Person.this.name);
+        }
+
+        public void setBirth(int birth){
+            Person.this.birth = birth;
+        };
     }
 
 };
