@@ -1,8 +1,10 @@
 package com.main;
 
 public class LearnKMP {
-    public void main(String[] args){
-        System.out.println(kmp("afghansbdgd","grh"));
+    public static void main(String[] args){
+        // 静态方法调用非静态方法
+        LearnKMP learnkmp = new LearnKMP();
+        System.out.println(learnkmp.kmp("afghansbdgd","grh"));
     }
 
     public int kmp(String s,String t){
